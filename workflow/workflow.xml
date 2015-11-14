@@ -1,0 +1,50 @@
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="Max Temperature">
+    <start to="max-temp"/>
+
+    <!--
+    <action name="max-temp">
+        <java>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <configuration>
+                <property>
+                    <name>mapred.job.queue.name</name>
+                    <value>${queueName}</value>
+                </property>
+            </configuration>
+            <main-class>com.intropro.morphline.MorphlineStreamMain</main-class>
+            <arg>-config</arg><arg>aae-ingest.conf</arg>
+            <file>${wf:conf("oozie.wf.application.path")}/conf/aae-ingest.conf#aae-ingest.conf</file>
+            <file>${wf:conf("oozie.wf.application.path")}/config-default.xml#config-default.xml</file>
+        </java>
+        <ok to="end"/>
+        <error to="fail"/>
+    </action>
+    -->
+
+    <action name="max-temp">
+        <java>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <configuration>
+                <property>
+                    <name>mapred.job.queue.name</name>
+                    <value>${queueName}</value>
+                </property>
+            </configuration>
+            <main-class>education.bigdata.mr.MaxTemperature</main-class>
+            <arg>hdfs://quickstart.cloudera:8020/user/cloudera/data/row/ncdc</arg>
+            <arg>hdfs://quickstart.cloudera:8020/user/cloudera/data/processed/max-temp</arg>
+            <file>${wf:conf("oozie.wf.application.path")}/config-default.xml#config-default.xml</file>
+        </java>
+        <ok to="end"/>
+        <error to="fail"/>
+    </action>
+
+    <kill name="fail">
+        <message>${wf:name()} job failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+
+    <end name="end"/>
+
+</workflow-app>

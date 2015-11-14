@@ -1,0 +1,126 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.directv.aae</groupId>
+  <artifactId>aae-ingest-wf</artifactId>
+  <version>1.0.1</version>
+  <name>Addressable Ads Enhancements Ingest</name>
+  
+  <packaging>pom</packaging>
+
+    <repositories>
+        <repository>                                                
+            <id>nexus-internal-releases</id>
+            <name>EA Nexus Releases</name>
+            <url>http://build.ea.intropro.com:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <repository>                                                
+            <id>nexus-internal-snapshots</id>
+            <name>EA Nexus Snapshots</name>
+            <url>http://build.ea.intropro.com:8081/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus-internal-releases</id>
+            <name>EA Nexus Releases</name>
+            <url>http://build.ea.intropro.com:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-internal-snapshots</id>
+            <name>EA Nexus Snapshots</name>
+            <url>http://build.ea.intropro.com:8081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>        
+    </distributionManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.directv.zookeeper.lock</groupId>
+            <artifactId>vd-zLock</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.directv.vd.auditlog</groupId>
+            <artifactId>vd-auditlog</artifactId>
+            <version>1.0.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.directv.aae</groupId>
+            <artifactId>aae-morphlines-components</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+               <groupId>com.intropro.bigdata.plugin</groupId>
+               <artifactId>lifecycle-maven-plugin</artifactId>
+               <version>1.0.7</version>
+                <configuration>
+                    <workflowConfigs>
+                        <configProperties>
+                                <workflowPath>workflow.xml</workflowPath>
+                                <configDefaultPath>config-default.xml</configDefaultPath>
+                                <omittedWfProperties>
+                                    <omittedWfPropertie>oozie.wf.application.path</omittedWfPropertie>
+                                </omittedWfProperties>
+                                <omittedDefProperties>
+                                    <omittedDefPropertie>oozie.user</omittedDefPropertie>
+                                    <omittedDefPropertie>oozie.libpath</omittedDefPropertie>
+                                    <omittedDefPropertie>oozie.use.system.libpath</omittedDefPropertie>
+                                    <omittedDefPropertie>oozie.wf.rerun.failnodes</omittedDefPropertie>
+                                </omittedDefProperties>
+                        </configProperties>
+                    </workflowConfigs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>validate-workflow</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeTypes>tar.bz2</includeTypes>
+                            <outputDirectory>${project.basedir}/${project.artifactId}-${project.version}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>assembly/pack.xml</descriptor>
+                    </descriptors>
+                    <finalName>${project.artifactId}-${project.version}</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <tarLongFileMode>warn</tarLongFileMode>
+                    <outputDirectory>${project.basedir}/target/package</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>dist-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

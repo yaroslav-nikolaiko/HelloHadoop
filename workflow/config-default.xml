@@ -1,0 +1,96 @@
+<configuration>
+
+    <!-- Hadoop ecosystem settings -->
+
+
+    <property>
+        <name>nameNode</name>
+        <value>hdfs://quickstart.cloudera:8020</value>
+        <description>
+            `nameNode` parameter defines NameNode location
+            - mandatory parameter
+        </description>
+    </property>
+    <property>
+        <name>jobTracker</name>
+        <value>quickstart.cloudera:8032</value>
+        <description>
+            `jobTracker` parameter defines JobTracker location
+            - mandatory parameter
+        </description>
+    </property>
+    <property>
+        <name>queueName</name>
+        <value>default</value>
+        <description>
+            `queueName` parameter defines queueName parameter
+            - default value: "default".
+            - possible values: names of the queues with different priority settings.
+        </description>
+    </property>
+
+
+    <!--
+    < Oozie settings section -->
+
+    <!--property>
+        <name>oozie.user</name>
+        <value>cloudera</value>
+        <description>
+            `oozie.user` parameter defines oozie user who runs the jobs
+            - mandatory parameter
+        </description>
+    </property>
+    <property>
+        <name>oozie.libpath</name>
+        <value>hdfs://localhost.localdomain:8020/user/oozie/share/lib</value>
+        <description>
+            `oozie.libpath` parameter defines path to oozie shared libraries
+            - mandatory parameter
+            - default value: "${nameNode}/user/oozie/share/lib".
+            - if ommited: Then libraries needed for jobs to run must be specified in other ways. Jobs might not be operational.
+        </description>
+    </property>
+    <property>
+        <name>oozie.use.system.libpath</name>
+        <value>true</value>
+        <description>
+            `oozie.use.system.libpath` parameter defines whether to use oozie.libpath
+            - mandatory parameter
+            - possible values: "true" (oozie will use oozie.libpath); "false" (oozie won't use oozie.libpath).
+            - if ommited: job will fail.
+        </description>
+    </property>
+    <property>
+        <name>oozie.wf.rerun.failnodes</name>
+        <value>true</value>
+        <description>
+            `oozie.wf.rerun.failnodes` parameter defines if failed nodes should be rerun
+            - default value: "true".
+            - possible values: "true" (every failed node will be rerun and reused for current job);
+            "false" (failed nodes won't take action in current job).
+        </description>
+    </property>
+    -->
+
+    <!-- Job configuration -->
+
+
+
+    <!-- Zookeeper-->
+
+    <!--
+    <property>
+        <name>zookeeper.quorum</name>
+        <value>localhost:2181</value>
+        <description>
+             `zookeeper.quorum` path to ZooKeeper server. 
+             - mandatory parameter
+             - Should be specified in [ip:port] format. There might be more then one
+               path. ZooKeeper Leader and the ZooKeeper Followers can be included in any sequence as
+               comma separated list ([ip:port],[ip:port],[ip:port],...)
+        </description>
+    </property>
+    -->
+    
+</configuration>
